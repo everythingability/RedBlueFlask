@@ -1,1 +1,1 @@
-git checkout https://github.com/everythingability/redblue.git
+git checkout https://github.com/everythingability/RedBlueFlask.git
