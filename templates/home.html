@@ -15,7 +15,7 @@
 
    {% for drawing in drawings %}
    <div class="card" style="width: 14rem;">
-   <a href="/static/index.html?id={{drawing.id}}">
+   <a href="./sketch?id={{drawing.id}}">
       <img class="card-img-top" 
       src="{% if drawing.img %}data:image/png;base64,{{drawing.img}}{%else%}/static/img/drawing.jpg{%endif%}" alt="Card image cap" width="180">
       </a>

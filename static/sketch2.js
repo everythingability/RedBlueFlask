@@ -1,5 +1,5 @@
 
-let theColor
+let theColor ='#FF0038'
 let theBackgroundColor = "#008cff"
 let strokeWidth = 4
 let cv, buffer, backgroundBuffer
@@ -78,11 +78,19 @@ function apiPutData(){
 }
 
 function changeColor(c){
-	theColor = c
+    theColor = c
+    buffer.stroke(c)
 }
 
 function setPaintColor(){//called from interface
-	changeColor(this.value())
+    var c = this.value()
+    changeColor(c)
+    print("color", c)
+    var event = {
+		type:"stroke",
+		value: c
+	}
+	data.events.push(event )
 }
 function setBgColor() {
 
@@ -96,9 +104,19 @@ function sendBG(c){
 		
 }
 
+
 function mouseReleased(){
-	print("Released", data.events.length)
 	
+    strokeWidth = rSlider.value();
+    var event = {
+		type:"strokeWeight",
+		value: strokeWidth
+    }
+    buffer.strokeWeight(strokeWidth)
+    print("strokeWeight", strokeWidth)
+    print("Released", data.events.length)
+	data.events.push(event )
+    
 }
 function mouseDragged() {
 
@@ -146,7 +164,7 @@ function setup() {
 
      //setMidShade();
 
-	rSlider = createSlider(0, 180, 4);
+	rSlider = createSlider(4, 80, 4);
     rSlider.position(80, yDiff);
 
     input = createFileInput(gotFile);
@@ -169,10 +187,11 @@ function setup() {
 
 function draw(){
 	background('lightgray')
-	noStroke()
-	//fill(theColor)
-	strokeWidth= rSlider.value();
-	ellipse(160, yDiff -30,strokeWidth,strokeWidth )
+    noStroke()
+
+    // Slider tool representation
+    fill(theColor)
+    ellipse(xDiff, yDiff, strokeWidth, strokeWidth)
 
    image(backgroundBuffer, xDiff, 0)
    image(buffer, xDiff, 0)
@@ -243,7 +262,7 @@ function gotFile(file) {
     img = createImage(newWidth, newHeight);
 
     //blendMode(DARKEST)
-		backgroundBuffer.imageMode(CENTER)
+	backgroundBuffer.imageMode(CENTER)
     var newY = (h-newHeight)/2
     backgroundBuffer.drawingContext.drawImage(raw, w/2 - newWidth/2, newY, newWidth, newHeight); //what does this do? If I don't do it, stuff doesn't work?
     backgroundBuffer.translate(0, 0)
@@ -251,15 +270,15 @@ function gotFile(file) {
     img = backgroundBuffer.get() //does this *force* it to be p5.Image... dunno?
     //does drawing to canvas somehow make the img kosher?
 
-    print("eh?")
+    
 
     print(img, img.width, img.height) //this seems to be a good measure of whether
     //or not the image has loaded...
 
     drawOnce = true
 
-		removeButton = createButton('Remove Image');
-	  removeButton.position(80, yDiff + 70);
+	  removeButton = createButton('Remove Image');
+	  removeButton.position(80, yDiff + 100);
 	  removeButton.mousePressed(removeBGImage);
   }
 
