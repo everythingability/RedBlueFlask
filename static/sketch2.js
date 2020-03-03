@@ -49,8 +49,10 @@ function initAPI(){
 				print(com)
 				eval(  com   )
 			}
-		}
-	  });
+        }
+       // player()//includes the settup for yellowtail
+      });
+      
 }
 
 
@@ -119,16 +121,22 @@ function mouseReleased(){
     
 }
 function mouseDragged() {
+    if (mouseX > xDiff){ //We're on the blue buffer
+      buffer.line(mouseX- xDiff, mouseY, pmouseX-xDiff, pmouseY)
+        // Send the mouse coordinates
+        var event = {
+            type:"line",
+            value:[mouseX-xDiff, mouseY, pmouseX-xDiff, pmouseY]
+        }
+	   data.events.push(event )
+    }else{
+        strokeWidth = rSlider.value();
+        background('lightgray')
+        fill(theColor)
+        print(strokeWidth, theColor)
+        ellipse(60, 122, strokeWidth, strokeWidth)
 
-	buffer.line(mouseX- xDiff, mouseY, pmouseX-xDiff, pmouseY)
-
-	// Send the mouse coordinates
-	var event = {
-		type:"line",
-		value:[mouseX-xDiff, mouseY, pmouseX-xDiff, pmouseY]
-	}
-	data.events.push(event )
-
+    }
 }
 
 
@@ -182,19 +190,24 @@ function setup() {
 	//apiPutCommand("stroke", "#FF0037")
 	//apiPutCommand("strokeWeight", 20)
 	initAPI();//gets the data
-
+   
 }
 
 function draw(){
-	background('lightgray')
+	//background('lightgray')
     noStroke()
 
     // Slider tool representation
-    fill(theColor)
-    ellipse(xDiff, yDiff, strokeWidth, strokeWidth)
+    
 
    image(backgroundBuffer, xDiff, 0)
    image(buffer, xDiff, 0)
+
+   
+        fill(theColor)
+        //print(strokeWidth, theColor)
+        ellipse(60, 124, strokeWidth, strokeWidth)
+    //animate()
 }
 
 
@@ -225,7 +238,36 @@ function centerCanvas() {
 }
 
 
-
+function player(){
+    yellowsetup( )
+        
+        inGesture = false
+        for (var p = 0; p<events.length; p++){
+            var event = events[p]
+            try{
+                if (event.type == "line"){
+                    
+                    var items = event['value'].split(",")
+                    var x = int(items[0])
+                    var y = int( items[1])
+                    
+                    if (inGesture == false){
+                        print('create', x, y)
+                        createGesture(x, y)
+                    }else{
+                        inGesture = true
+                        print('add', x, y)
+                        addToGesture( x, y )
+                    }
+                }else{ //it's a command
+                    inGesture = false
+                }   
+        
+        }catch(e){
+            print(e)
+        }   
+    }
+}
 
 
 
@@ -238,23 +280,27 @@ function gotFile(file) {
 
   raw.onload = function() {
 
-		var maxWidth = w
-          var maxHeight = h
-          var width = raw.width
-          var height = raw.height
+		  var maxWidth = buffer.width
+          var maxHeight = buffer.height
+          var rw = raw.width
+          var rh = raw.height
 
-          if(width>height){
-            if(width > maxWidth){
-              ratio = maxWidth / width;   // get ratio for scaling image
-              var newHeight = height * ratio;  // Scale height based on ratio
-              var newWidth = width * ratio;    // Reset width to match scaled image
+          if(rw>rh){
+            if(rw > maxWidth){
+              ratio = maxWidth / rw;   // get ratio for scaling image
+              var newHeight = rh * ratio;  // Scale height based on ratio
+              var newWidth = rw * ratio;    // Reset width to match scaled image
+            }else{
+                var newHeight = rh
+                var newWidth = rw
+            
             }
           }else{
             // Check if current height is larger than max
-            if(height > maxHeight){
-              ratio = maxHeight / height; // get ratio for scaling image
-                var newWidth =width * ratio;    // Reset width to match scaled image
-              var newHeight =height * ratio;    // Reset height to match scaled image
+            if(rh > maxHeight){
+                ratio = maxHeight / rh; // get ratio for scaling image
+                var newWidth =rw * ratio;    // Reset width to match scaled image
+                var newHeight =rh * ratio;    // Reset height to match scaled image
             }
             //End Do Image
           }
@@ -265,6 +311,7 @@ function gotFile(file) {
 	backgroundBuffer.imageMode(CENTER)
     var newY = (h-newHeight)/2
     backgroundBuffer.drawingContext.drawImage(raw, w/2 - newWidth/2, newY, newWidth, newHeight); //what does this do? If I don't do it, stuff doesn't work?
+    print( "dimensions:",w/2 - newWidth/2, newY, newWidth, newHeight)
     backgroundBuffer.translate(0, 0)
     //NOTE! Without the following line img doesn't work? But does/can draw to screen...
     img = backgroundBuffer.get() //does this *force* it to be p5.Image... dunno?

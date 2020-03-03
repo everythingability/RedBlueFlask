@@ -8,20 +8,23 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.dom.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.sound.min.js"></script>
-
+  <script type="text/javascript" src="/static/yellow.js"></script>
 
 <style>
 .card-img-top{
   background:#0C74FF;
 }
 </style>
+
     <script>
         var id = {{drawing.id}};
         console.log("id", id);
     </script>
+
     <div id="sketch">
     <script type="text/javascript" src="/static/sketch2.js"></script>
     </div>
+
 {% endblock %}
 
 {% block footer %} {{ super() }} {% endblock %}
