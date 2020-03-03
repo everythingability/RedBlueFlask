@@ -1,0 +1,45 @@
+CREATE YOUR FOLDER
+mkdir yourprojectname
+cd yourprojectname
+mkdir yourprojectname/app
+
+
+SETUP VIRTUALENV https://www.michael-noll.com/blog/2010/11/29/virtualenv-cheat-sheet/
+virtualenv env
+source env/bin/activate
+
+START YOUR APP
+mkdir yourprojectname/app
+
+https://www.codementor.io/@garethdwyer/building-a-crud-application-with-flask-and-sqlalchemy-dm3wv7yu2
+pip install flask sqlalchemy flask-sqlalchemy
+cd app
+    create main.py
+    create templates
+    create static
+        create home.html
+    create models.py <-- nope
+
+INITIALIZE YOUR DB
+python
+from main import db
+db.create_all()
+
+//ADD GITHUB VERSIONING
+
+git init
+git add README.md
+git commit -m "first commit"
+//go and create it on github first //https://github.com/everythingability
+//Add a README.md ?
+git pull origin  master
+git remote add origin https://github.com/everythingability/shark.git
+git remote add origin https://github.com/everythingability/redblue.git
+
+git add *
+git push -u origin master
+git commit
+
+--
+git checkout https://github.com/everythingability/redblue.git
+

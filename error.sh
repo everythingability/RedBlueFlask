@@ -1,0 +1,1 @@
+tail /home/tomsmith/logs/user/error_redblue.log
