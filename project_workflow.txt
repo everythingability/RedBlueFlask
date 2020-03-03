@@ -28,7 +28,7 @@ db.create_all()
 //ADD GITHUB VERSIONING
 
 git init
-git add README.md
+git add *
 git commit -m "first commit"
 //go and create it on github first //https://github.com/everythingability
 //Add a README.md ?
