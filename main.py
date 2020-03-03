@@ -13,12 +13,12 @@ from flask_migrate import Migrate
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 database_file = "sqlite:///{}".format(os.path.join(project_dir, "redblue.db"))
-
+print(database_file)
 
 app = Flask(__name__, 
 	static_folder='static', 
 	static_url_path='/static',
-	template_folder='templates')
+	template_folder='templates')	
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -33,6 +33,7 @@ class Drawing(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(50), nullable=False)
 	events = db.relationship('DrawingEvent', backref='drawing', lazy=True, cascade = "all, delete, delete-orphan" )
+	img = db.Column(db.Text(), nullable=True)
 
 	def __repr__(self):
 		return "<name: {}>".format(self.name)
@@ -77,9 +78,9 @@ def update():
 	return redirect("/")
 
 
-@app.route("/delete", methods=["POST"])
+@app.route("/delete", methods=["GET"])
 def delete():
-	id = int(request.form.get("id"))
+	id = int(request.args['id'])
 	drawing = Drawing.query.filter_by(id=id).one()
 
 	#dws = DrawingEvent.query.filter_by(drawing_id=id)
@@ -153,11 +154,15 @@ def put():
 	print("id", id)
 	drawing = Drawing.query.get(id)
 	print("drawing", drawing)
-	#delete all the events
+	#delete all the previous events
 	dws = DrawingEvent.query.filter_by(drawing_id=id)
 	dws.delete(synchronize_session=False)
 
 	events = data['events']
+	img = data['img']
+	drawing.img = img
+	db.session.commit()
+	print(len(img))
 
 	for e in events:
 		
@@ -174,7 +179,7 @@ def put():
 				y = int(float(t[1]))
 				px = int(float(t[2]))
 				py = int(float(t[3]))
-				print(x,y, px, py)
+				#print(x,y, px, py)
 				s = '%d, %d ,%d ,%d' % (x,y, px, py)
 			elif type(value) == type([]):
 				'' 

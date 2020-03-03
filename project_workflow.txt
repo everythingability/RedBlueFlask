@@ -33,7 +33,7 @@ git commit -m "first commit"
 //go and create it on github first //https://github.com/everythingability
 //Add a README.md ?
 git pull origin  master
-git remote add origin https://github.com/everythingability/shark.git
+git remote add origin https://github.com/everythingability/RedBlueFlask.git
 git remote add origin https://github.com/everythingability/redblue.git
 
 git add *

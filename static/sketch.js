@@ -61,9 +61,18 @@ function apiPutData(){
 	var url = window.location.origin + "/api_put?id=" + id	
 	console.log(url)
 	id = int(id)
-	var postData = {'id':id, "kind":"data",'events': data.events}
+
+	var canvas = $('canvas')[0];
+	var img = canvas.toDataURL('image/png').replace(/data:image\/png;base64,/, '');
+ 
+		// make names  eg "img_1.png", "img_2.png"......etc"
+	var iname = 'img_' + id + '.png'; 
+
+
+	var postData = {'id':id, "kind":"data",'events': data.events,img:img}
 	httpPost(url, 'json', postData, function(result) {
 		console.log(result)
+		window.location.replace("/");
 	  });
    
 }
