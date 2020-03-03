@@ -48,7 +48,6 @@ class DrawingEvent(db.Model):
   
 
 @app.route("/", methods=["GET", "POST"])
-
 def home():
 	try:
 		if request.form:
@@ -59,6 +58,15 @@ def home():
 
 		drawings = Drawing.query.all()
 		return render_template("home.html", drawings=drawings)
+	except Exception as err:
+		return str(err)
+
+@app.route("/sketch", methods=["GET"])
+def sketch():
+	try:
+		id = int(request.args['id'])
+		drawing = Drawing.query.filter_by(id=id).first()
+		return render_template("sketch.html", drawing=drawing)
 	except Exception as err:
 		return str(err)
 	
@@ -91,7 +99,7 @@ def delete():
 	
 	return redirect("/")
 
-### GET !
+### API GET !
 @app.route('/api', methods=['GET', 'POST'])
 def get():
 
